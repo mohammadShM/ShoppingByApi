@@ -24,10 +24,10 @@ class BrandController extends ApiController
     public function store(Request $request, Brand $brand): JsonResponse
     {
         $validate = Validator::make($request->all(), [
-            "title" => 'required|string',
+            "title" => 'required|string|unique:brands,title',
             "image" => 'required|image',
         ]);
-        if ($validate->failed()) {
+        if ($validate->fails()) {
             return $this->errorResponse(422, $validate->messages());
         }
         $brand->newBrand($request);
@@ -40,13 +40,30 @@ class BrandController extends ApiController
         //
     }
 
-    public function update(Request $request, $id): void
+    /**
+     * @throws Exception
+     */
+    public function update(Request $request, Brand $brand): JsonResponse
     {
-        //
+        $brandUnique = Brand::query()->where('title', $request->get('title'))
+            ->where('id', '!=', $brand->id)->exists();
+        if ($brandUnique) {
+            return $this->errorResponse(422, 'The title has already been taken');
+        }
+        $validate = Validator::make($request->all(), [
+            "title" => 'required|string',
+            "image" => 'nullable|image',
+        ]);
+        if ($validate->fails()) {
+            return $this->errorResponse(422, $validate->messages());
+        }
+        $brand->updatedBrand($request);
+        return $this->successResponse(200, new BrandResource($brand), 'Brand updated Successfully');
     }
 
-    public function destroy($id): void
+    public function destroy(Brand $brand): JsonResponse
     {
-        //
+        $brand->delete();
+        return $this->successResponse(200, $brand->title, 'Brand deleted Successfully');
     }
 }
