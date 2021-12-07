@@ -18,3 +18,4 @@ Route::get('category/{category}/parent', [categoryController::class, 'parent']);
 Route::get('category/{category}/children', [categoryController::class, 'children']);
 // for product =======================================================================
 Route::apiResource('product', ProductController::class);
+Route::apiResource('product/gallery', ProductController::class);
