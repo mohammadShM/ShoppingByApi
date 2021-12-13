@@ -66,4 +66,11 @@ class BrandController extends ApiController
         $brand->delete();
         return $this->successResponse(200, $brand->title, 'Brand deleted Successfully');
     }
+
+    public function getProducts(Brand $brand): JsonResponse
+    {
+        return $this->successResponse(200, new BrandResource($brand->load('products')),
+            'get products successfully');
+    }
+
 }

@@ -17,12 +17,15 @@ class BrandResource extends JsonResource
     /** @noinspection PhpArrayShapeAttributeCanBeAddedInspection */
     public function toArray($request): array
     {
+        /** @noinspection LaravelFunctionsInspection */
         return [
             "id" => $this->id,
             "title" => $this->title,
-            "image" => $this->image,
-            "created_at" => $this->created_at,
-            "updated_at" => $this->updated_at,
+            "image" => url(env('IMAGE_UPLOADED_FOR_BRANDS') . $this->image),
+//            "image" => $this->image,
+//            "created_at" => $this->created_at,
+//            "updated_at" => $this->updated_at,
+            "products" => ProductResource::collection($this->whenLoaded('products')),
         ];
     }
 }

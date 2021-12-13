@@ -11,15 +11,18 @@ class ProductResource extends JsonResource
     public function toArray($request): array
     {
         /** @noinspection PhpUndefinedFieldInspection */
+        /** @noinspection LaravelFunctionsInspection */
         return [
+            'id' => $this->id,
             'category_id' => $this->category_id,
             'brand_id' => $this->brand_id,
             'name' => $this->name,
-            'slug' => $this->slug,
+            // 'slug' => $this->slug, // for security not show slug in response
+            'image' => url(env('IMAGE_UPLOADED_FOR_PRODUCTS') . $this->image),
             'price' => $this->price,
-            'image' => $this->image,
             'description' => $this->description,
             'quantity' => $this->quantity,
+            'galleries' => GalleryResource::collection($this->galleries),
         ];
     }
 }

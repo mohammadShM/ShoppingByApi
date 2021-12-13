@@ -12,6 +12,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 // ======================================= Admin Route =======================================
 // for banner =======================================================================
 Route::apiResource('brands', BrandController::class);
+Route::get('brands/{brand}/products', [BrandController::class, 'getProducts']);
 // for category =======================================================================
 Route::apiResource('category', categoryController::class);
 Route::get('category/{category}/parent', [categoryController::class, 'parent']);

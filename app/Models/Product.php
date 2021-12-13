@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -23,6 +24,7 @@ class Product extends Model
 
     protected $guarded = ['id'];
 
+    // relationShips: =====================================================================
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
@@ -32,6 +34,12 @@ class Product extends Model
     {
         return $this->belongsTo(Brand::class);
     }
+
+    public function galleries(): HasMany
+    {
+        return $this->hasMany(Gallery::class);
+    }
+    // end relationShips: =====================================================================
 
     /**
      * @throws Exception
