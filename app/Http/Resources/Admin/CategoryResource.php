@@ -24,9 +24,12 @@ class CategoryResource extends JsonResource
             // when load parent show information parent
             "parent" => new CategoryResource($this->whenLoaded('parent')),
             // when load children show information children
-            "children" => CategoryResource::collection($this->whenLoaded('children')),
+            // "children" => CategoryResource::collection($this->whenLoaded('children')),
+            "children" => self::collection($this->whenLoaded('children')),
+            "products" => ProductResource::collection($this->whenLoaded('products')),
             "created_at" => $this->created_at,
             "updated_at" => $this->updated_at,
         ];
     }
+
 }

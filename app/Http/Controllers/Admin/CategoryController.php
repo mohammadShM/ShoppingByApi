@@ -3,13 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\ApiController;
+use App\Http\Requests\Admin\CategoryCreateRequest;
 use App\Http\Resources\Admin\CategoryResource;
 use App\Models\Category;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class categoryController extends ApiController
+class CategoryController extends ApiController
 {
 
     public function index(): JsonResponse
@@ -21,15 +22,15 @@ class categoryController extends ApiController
         ], 'get Categories');
     }
 
-    public function store(Request $request, Category $category): JsonResponse
+    public function store(CategoryCreateRequest $request, Category $category): JsonResponse
     {
-        $validate = Validator::make($request->all(), [
-            "title" => 'required|string|unique:categories,title',
-            "parent_id" => 'nullable|integer|exists:categories,id',
-        ]);
-        if ($validate->fails()) {
-            return $this->errorResponse(422, $validate->messages());
-        }
+//        $validate = Validator::make($request->all(), [
+//            "title" => 'required|string|unique:categories,title',
+//            "parent_id" => 'nullable|integer|exists:categories,id',
+//        ]);
+//        if ($validate->fails()) {
+//            return $this->errorResponse(422, $validate->messages());
+//        }
         $category->newCategory($request);
         $dataResponse = $category->orderBy('id', 'desc')->first();
         return $this->successResponse(200, new CategoryResource($dataResponse), 'Category Created Successfully');
@@ -76,6 +77,12 @@ class categoryController extends ApiController
         // for set relation children by $category->load('children')
         return $this->successResponse(200,
             new CategoryResource($category->load('children')), 'get children');
+    }
+
+    public function getProducts(Category $category): JsonResponse
+    {
+        return $this->successResponse(200,new CategoryResource($category->load('products')),
+            'get products in category');
     }
 
 }

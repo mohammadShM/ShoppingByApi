@@ -17,18 +17,23 @@ use Illuminate\Http\Request;
  */
 class Category extends Model
 {
-    use HasFactory , SoftDeletes;
+    use HasFactory, SoftDeletes;
 
     protected $guarded = ['id'];
 
     public function parent(): BelongsTo
     {
-        return $this->belongsTo(__CLASS__,'parent_id');
+        return $this->belongsTo(__CLASS__, 'parent_id');
     }
 
     public function children(): HasMany
     {
-        return $this->hasMany(__CLASS__,'parent_id');
+        return $this->hasMany(__CLASS__, 'parent_id');
+    }
+
+    public function products(): HasMany
+    {
+        return $this->hasMany(Product::class);
     }
 
     public function newCategory(Request $request): void
@@ -39,7 +44,7 @@ class Category extends Model
         ]);
     }
 
-    public function updatedCategory(Request $request)
+    public function updatedCategory(Request $request): void
     {
         $this->update([
             'title' => $request->get('title'),
