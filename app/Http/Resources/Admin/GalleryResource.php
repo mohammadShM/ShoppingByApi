@@ -14,8 +14,10 @@ class GalleryResource extends JsonResource
         /** @noinspection LaravelFunctionsInspection */
         return [
             'id' => $this->id,
+            'product_id' => $this->product_id,
             'path' => url(env('IMAGE_UPLOADED_FOR_GALLERIES') . $this->path),
             'mime' => $this->mime,
         ];
     }
+
 }

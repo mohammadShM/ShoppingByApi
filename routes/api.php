@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\GalleryController;
 use App\Http\Controllers\Admin\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -20,4 +21,4 @@ Route::get('category/{category}/parent', [CategoryController::class, 'parent']);
 Route::get('category/{category}/children', [CategoryController::class, 'children']);
 // for product =======================================================================
 Route::apiResource('product', ProductController::class);
-Route::apiResource('product/gallery', ProductController::class);
+Route::apiResource('product.gallery', GalleryController::class);

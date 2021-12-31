@@ -6,7 +6,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class CategoryCreateRequest extends FormRequest
+class GalleryCreateRequest extends FormRequest
 {
 
     public function authorize(): bool
@@ -18,8 +18,7 @@ class CategoryCreateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "title" => 'required|string|unique:categories,title',
-            "parent_id" => 'nullable|integer|exists:categories,id',
+           "path.*" => 'required|image|mimes:jpg,jpeg,png,svg',
         ];
     }
 
@@ -32,5 +31,6 @@ class CategoryCreateRequest extends FormRequest
             'data' => $validator->errors(),
         ]));
     }
+
 
 }
