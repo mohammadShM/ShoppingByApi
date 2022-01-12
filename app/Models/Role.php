@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * @property mixed permissions
+ * @property mixed title
  * @method static truncate()
  */
 class Role extends Model
@@ -19,6 +20,11 @@ class Role extends Model
     public function permissions(): BelongsToMany
     {
         return $this->belongsToMany(Permission::class)->withTimestamps();
+    }
+
+    public function hasPermission($permission): bool
+    {
+        return $this->permissions()->where('title', $permission)->exists();
     }
 
 }
