@@ -7,6 +7,7 @@ use App\Http\Requests\Admin\RoleCreateRequest;
 use App\Models\Role;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class RoleController extends ApiController
 {
@@ -18,6 +19,9 @@ class RoleController extends ApiController
 
     public function store(RoleCreateRequest $request): JsonResponse
     {
+        if (Gate::denies('create-role')) {
+            return $this->errorResponse(403, 'not permission user by gates');
+        }
         /** @var Role $role */
         $role = Role::query()->create([
             'title' => $request->get('title'),

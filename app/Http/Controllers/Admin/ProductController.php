@@ -8,6 +8,7 @@ use App\Models\Product;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 
 class ProductController extends ApiController
@@ -15,6 +16,9 @@ class ProductController extends ApiController
 
     public function index(): JsonResponse
     {
+        if (Gate::denies('read-product')) {
+            return $this->errorResponse(403, 'not permission user by gates');
+        }
         $product = Product::paginate(10);
         return $this->successResponse(201, [
             'products' => ProductResource::collection($product),

@@ -6,7 +6,7 @@ use App\Http\Controllers\Admin\GalleryController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\AuthController;
-use App\Http\Middleware\CheckPermission;
+use App\Http\Controllers\PaymentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -15,11 +15,15 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 // =================================================== Auth Route ===================================================
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
-Route::post('/logout', [AuthController::class, 'logout']);
+Route::middleware('guest')->post('/register', [AuthController::class, 'register']);
+Route::middleware('guest')->post('/login', [AuthController::class, 'login']);
+Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
+Route::middleware('auth:sanctum')->post('/payment/store', [PaymentController::class, 'store']);
+Route::post('/payment/verify', [PaymentController::class, 'verify']);
 // =================================================== Admin Route ===================================================
-Route::prefix('admin')->middleware(['auth:sanctum', CheckPermission::class . ':view-dashboard'])
+Route::prefix('admin')
+    // ->middleware(['auth:sanctum', CheckPermission::class . ':view-dashboard']) // by middleware
+    ->middleware(['auth:sanctum', 'can:view-dashboard']) // by gate
     ->group(static function () {
         // for banner =======================================================================
         Route::apiResource('brands', BrandController::class);

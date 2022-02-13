@@ -14,7 +14,7 @@ class CheckPermission
     public function handle(Request $request, Closure $next, $permission)
     {
         if (!auth()->user()->role->hasPermission($permission)) {
-            return $this->errorResponse(403, 'not permission user !');
+            return $this->errorResponse(403, 'not permission user by middleware!');
         }
         return $next($request);
     }
